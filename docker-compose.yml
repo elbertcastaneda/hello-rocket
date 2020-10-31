@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: pg_rocket_container
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      PGDATA: /data/postgres
+    volumes:
+      - pg_rocket:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - pg_rocket
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin_rocket_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-elbert.castaneda@gmail.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    volumes:
+      - pgadmin_rocket:/var/lib/pgadmin
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    networks:
+      - pg_rocket
+    restart: unless-stopped
+
+networks:
+  pg_rocket:
+    driver: bridge
+
+volumes:
+    pg_rocket:
+    pgadmin_rocket:
