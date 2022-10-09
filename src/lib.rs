@@ -21,7 +21,7 @@ pub fn establish_connection() -> PgConnection {
         .expect(&format!("Error connecting to {}", database_url))
 }
 
-pub fn create_post<'a>(conn: &PgConnection, title: &'a str, body: &'a str) -> Post {
+pub fn create_post<'a>(conn: &mut PgConnection, title: &'a str, body: &'a str) -> Post {
     use schema::posts;
 
     let new_post = NewPost {

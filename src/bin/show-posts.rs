@@ -8,10 +8,10 @@ use self::diesel::prelude::*;
 fn main() {
     use hello_rocket::schema::posts::dsl::*;
 
-    let connection = establish_connection();
+    let connection = &mut establish_connection();
     let results = posts.filter(published.eq(true))
         .limit(5)
-        .load::<Post>(&connection)
+        .load::<Post>(connection)
         .expect("Error loading posts");
 
     println!("Displaying {} posts", results.len());
